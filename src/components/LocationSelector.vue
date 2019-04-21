@@ -60,7 +60,7 @@ export default {
 
 			var latitude = (((x / (w/2)) - 1) * 180) + 10
 			if (latitude > 180){
-				latitude = 180 - (latitude - 180)
+				latitude = -180 + (latitude - 180)
 			}
 			var longitude = ((y / (h/2)) - 1) * -90
 
