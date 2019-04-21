@@ -88,8 +88,8 @@ export default {
 					this.location.longitude = parseFloat(response.data.major.latt)
 					this.location.latitude = parseFloat(response.data.major.longt)
 				}
-				this.$emit('changedName',this.location.name)
-				//this.$emit('changeLocation', this.location)
+				//this.$emit('changedName',this.location.name)
+				this.$emit('changeLocation', this.location)
 			})
 			.finally(this.$emit('hide'))
 		},
