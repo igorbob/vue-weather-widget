@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+	 <div id="resizable">
+	    <WeatherWidget/>
+	 </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import WeatherWidget from "./components/WeatherWidget.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    WeatherWidget
   }
 };
 </script>
@@ -24,5 +25,13 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#resizable {
+  border: 2px solid;
+  padding: 20px;
+  width: 300px;
+  resize: both;
+  overflow: auto;
+  position: relative;
 }
 </style>
