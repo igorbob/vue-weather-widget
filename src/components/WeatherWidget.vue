@@ -7,7 +7,7 @@
 	  <section v-else>
 		  <div v-if="loading"> Loading...</div>
 		  <div v-else>
-			  It is {{temperature}}°C in <button @click="show_location_selector = true">{{location.city}}</button>
+			  It is {{temperature}}°C in <button @click="show_location_selector = true">{{location.name}}</button>
 		  </div>
 	  </section>
 	  <LocationSelector :visible="show_location_selector"
@@ -113,6 +113,7 @@ export default {
 #weather-widget {
 	background-color: skyblue;
 	position: relative;
+	color: black;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;

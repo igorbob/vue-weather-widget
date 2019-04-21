@@ -25,11 +25,15 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display: flex;
+  justify-content: center;
 }
 #resizable {
   border: 2px solid;
-  padding: 20px;
-  width: 300px;
+  color: grey;
+  padding: 5px;
+  height: 250px;
+  width: 500px;
   resize: both;
   overflow: auto;
   position: relative;

@@ -4,7 +4,7 @@
 	 <button v-on:click="$emit('hide')">x</button>
 	 <div id="world-map"
 	 		ref="world_map"
-			@click="set_position">
+			@click="changeLocation">
 	 		<img :src="require('@/assets/world_map.png')" />
 			<div id="location-indicator" :style="locatorStyle">⚬</div>
 			<resize-observer @notify="updateSize" />
@@ -49,10 +49,10 @@ export default {
 		  var y = (h/2) * ((longitude)/ -90) + (h/2)
 
 		  return {paddingLeft: x+'px',paddingTop:y+'px'}
-	  }
+	  },
   },
 	methods: {
-		set_position: function (event) {
+		changeLocation: function (event) {
 			var x = event.offsetX
 			var y = event.offsetY
 			let w = this.$refs.world_map.clientWidth
@@ -66,13 +66,13 @@ export default {
 
 			this.location.latitude = latitude
 			this.location.longitude = longitude
-			this.location.city = '...'
+			this.location.name = '...'
 			//this.$emit('changeLocation', this.location)
 
-			this.get_location_name(latitude,longitude)
+			this.fetchCity(latitude,longitude)
 			//this.$emit('hide')
 		},
-		get_location_name: function (latitude,longitude) {
+		fetchCity: function (latitude,longitude) {
 			var proxy = 'https://cors-anywhere.herokuapp.com/'
 			var api = 'https://api.3geonames.org/'
 			var call = proxy + api + longitude + ',' + latitude + '.json'
@@ -80,16 +80,23 @@ export default {
 			axios
 	      .get(call)
 			.then(response => {
-				// For some reason longitude and latitude are switched API response
-				this.location.city = response.data.major.city
-				this.location.longitude = parseFloat(response.data.major.latt)
-				this.location.latitude = parseFloat(response.data.major.longt)
-				console.log(response.data)
 				// no changeLocation event
-				//
+				if (Object.entries(response.data.major.city).length === 0) {
+					this.location.name = this.formatLatLong(this.location.longitude,this.location.latitude)
+				} else {
+					this.location.name = response.data.major.city
+					this.location.longitude = parseFloat(response.data.major.latt)
+					this.location.latitude = parseFloat(response.data.major.longt)
+				}
+				this.$emit('changedName',this.location.name)
 				//this.$emit('changeLocation', this.location)
 			})
-			.finally(this.$emit('updateCity',this.location.city))
+			.finally(this.$emit('hide'))
+		},
+		formatLatLong(latitude, longitude) {
+			var north_south = latitude > 0 ? '° N' : '° S'
+			var east_west = longitude > 0 ? '° E' : '° W'
+			return Math.abs(latitude.toFixed(4)) + north_south + ', ' + Math.abs(longitude.toFixed(4)) + east_west
 		},
 		updateSize: function () {
 			this.mapWidth = this.$refs.world_map.clientWidth
