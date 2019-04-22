@@ -1,5 +1,6 @@
 # my-weather-app
 
+[live demo](https://igorbob.github.io/vue-weather-widget/)
 
 ## Project setup
 ```
