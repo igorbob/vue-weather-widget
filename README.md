@@ -1,6 +1,6 @@
 # my-weather-app
 
-[live demo](https://igorbob.github.io/vue-weather-widget/)
+The widget displays an icon based on current weather at the given location. To change the location; click on the current location and you will be presented with a world map. Check here for a [live demo](https://igorbob.github.io/vue-weather-widget/)
 
 ## Project setup
 ```
