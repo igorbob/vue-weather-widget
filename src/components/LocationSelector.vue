@@ -40,47 +40,44 @@ export default {
 	  this.updateSize()
   },
   computed: {
-	  locatorStyle: function () {
-		  var latitude = this.location.latitude
-		  var longitude = this.location.longitude
-		  let w = this.mapWidth
-		  let h = this.mapHeight
-		  var x = (w/2) * ((latitude - 10)/180) + (w/2)
-		  var y = (h/2) * ((longitude)/ -90) + (h/2)
+	  locatorStyle() {
+		  const latitude = this.location.latitude
+		  const longitude = this.location.longitude
+		  const w = this.mapWidth
+		  const h = this.mapHeight
+		  const x = (w/2) * ((latitude - 10)/180) + (w/2)
+		  const y = (h/2) * ((longitude)/ -90) + (h/2)
 
 		  return {paddingLeft: x+'px',paddingTop:y+'px'}
 	  },
   },
 	methods: {
-		changeLocation: function (event) {
-			var x = event.offsetX
-			var y = event.offsetY
+		changeLocation(event) {
+			const x = event.offsetX
+			const y = event.offsetY
 			let w = this.$refs.world_map.clientWidth
  		   let h = this.$refs.world_map.clientHeight
 
-			var latitude = (((x / (w/2)) - 1) * 180) + 10
+			let latitude = (((x / (w/2)) - 1) * 180) + 10
 			if (latitude > 180){
 				latitude = -180 + (latitude - 180)
 			}
-			var longitude = ((y / (h/2)) - 1) * -90
+			const longitude = ((y / (h/2)) - 1) * -90
 
 			this.location.latitude = latitude
 			this.location.longitude = longitude
 			this.location.name = '...'
-			//this.$emit('changeLocation', this.location)
 
 			this.fetchCity(latitude,longitude)
-			//this.$emit('hide')
 		},
-		fetchCity: function (latitude,longitude) {
-			var proxy = 'https://cors-anywhere.herokuapp.com/'
-			var api = 'https://api.3geonames.org/'
-			var call = proxy + api + longitude + ',' + latitude + '.json'
+		fetchCity(latitude,longitude) {
+			const proxy = 'https://cors-anywhere.herokuapp.com'
+			const api = 'https://api.3geonames.org'
+			const call = `${proxy}/${api}/${longitude},${latitude}.json`
 
 			axios
 	      .get(call)
 			.then(response => {
-				// no changeLocation event
 				if (Object.entries(response.data.major.city).length === 0) {
 					this.location.name = this.formatLatLong(this.location.longitude,this.location.latitude)
 				} else {
@@ -88,17 +85,16 @@ export default {
 					this.location.longitude = parseFloat(response.data.major.latt)
 					this.location.latitude = parseFloat(response.data.major.longt)
 				}
-				//this.$emit('changedName',this.location.name)
 				this.$emit('changedLocation', this.location)
 			})
 			.finally(this.$emit('hide'))
 		},
 		formatLatLong(latitude, longitude) {
-			var north_south = latitude > 0 ? '° N' : '° S'
-			var east_west = longitude > 0 ? '° E' : '° W'
-			return Math.abs(latitude.toFixed(4)) + north_south + ', ' + Math.abs(longitude.toFixed(4)) + east_west
+			const north_south = latitude > 0 ? '° N' : '° S'
+			const east_west = longitude > 0 ? '° E' : '° W'
+			return `${Math.abs(latitude.toFixed(4))}${north_south}, ${Math.abs(longitude.toFixed(4))}${east_west}`
 		},
-		updateSize: function () {
+		updateSize() {
 			this.mapWidth = this.$refs.world_map.clientWidth
 	 	   this.mapHeight = this.$refs.world_map.clientHeight
 		}

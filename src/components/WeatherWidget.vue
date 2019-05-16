@@ -1,5 +1,5 @@
 <template>
-  <div id="weather-widget">
+  <div class="weather-widget">
 	  <img :src="icon_src" />
 	  <section v-if="errored">
 		  ERROR: could not fetch weather data
@@ -49,7 +49,7 @@ export default {
 	  }
   },
   computed: {
-	  icon_src: function () {
+	  icon_src() {
 		  const iconNames = {
 			  'clear-day': 'Sun',
 			  'clear-night': 'Moon',
@@ -63,19 +63,20 @@ export default {
 			  'partly-cloudy-night': 'Cloud-Moon'
 		  }
 		  	name = iconNames[this.icon]
-			return require('@/assets/icons/' + name + '.svg')
+			return require(`@/assets/icons/${name}.svg`)
 	  }
   },
 	mounted() {
 		this.fetchWeatherData()
 	},
 	methods: {
-		fetchWeatherData: function () {
-			var proxy = 'https://cors-anywhere.herokuapp.com/'
-			var api = 'https://api.darksky.net/forecast/'
-			var key = '841c8e5705ec8fe6289069e5fc6c679d'
-			var longlat = '/' + this.location.longitude + ',' + this.location.latitude
-			var call = proxy + api + key + longlat
+		fetchWeatherData() {
+			const proxy = 'https://cors-anywhere.herokuapp.com'
+			const api = 'https://api.darksky.net/forecast'
+			const key = '841c8e5705ec8fe6289069e5fc6c679d'
+			const longitude = this.location.longitude
+			const latitude = this.location.latitude
+			const call = `${proxy}/${api}/${key}/${longitude},${latitude}/`
 
 			axios
 	      .get(call , {
@@ -91,7 +92,7 @@ export default {
 			})
 			.finally(() => this.loading = false)
 		},
-		load: function (data) {
+		load(data) {
 			this.icon = data.currently.icon
 			this.temperature = Math.round(data.currently.temperature)
 			this.info = data
@@ -110,7 +111,7 @@ export default {
 
 <style scoped>
 
-#weather-widget {
+.weather-widget {
 	background-color: skyblue;
 	position: relative;
 	color: black;
@@ -118,19 +119,5 @@ export default {
 	height: 100%;
 	overflow: hidden;
 }
-
-#location-selector {
-	background-color: lightGrey;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 100%;
-	transition: top 0.8s linear;
-}
-
-#location-selector.active {
-	top: 0%;
-}
-
 
 </style>
